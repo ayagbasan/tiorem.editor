@@ -1,0 +1,141 @@
+﻿<!-- START RESPONSIVE TABLES -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+
+            <div class="panel-heading ui-draggable-handle">
+                <h3 class="panel-title">HABERLER</h3>
+            </div>
+            <div class="panel-body panel-body-search">
+                <div class="input-group">
+                    <span class="input-group-addon"><span class="fa fa-search"></span></span>
+                    <input id="filterArticle" type="text" class="form-control" placeholder="Haber ara...">
+                </div>
+            </div>
+            <div class="panel-body panel-body-table">
+
+
+                <!--<div id="grid"></div>-->
+                <div id="grid"
+                     kendo-grid [filterable]="true"
+                     k-options="gridOptions"
+            </div>
+
+
+        </div>
+    </div>
+
+</div>
+
+
+<div class="row">
+    <div class="col-md-6">
+
+        <div class="panel panel-default" ng-show="SelectedArticle==null">
+
+            <div class="panel-heading ui-draggable-handle">
+                <h3 class="panel-title">Haber Detayları</h3>
+            </div>
+
+            <div class="panel-body ">
+
+
+                <blockquote class="blockquote-success">
+                    <p>Detayları görebilmek ve tag eklemek için listen seçim yapınız.</p>
+                </blockquote>
+            </div>
+
+
+        </div>
+
+
+
+        <div class="timeline" style="width: 100%" ng-show="SelectedArticle!=null">
+
+
+
+
+            <!-- START TIMELINE ITEM -->
+            <div class="timeline-item" style="width: 100%" >
+                <div class="timeline-item-content">
+                    <div class="timeline-heading">
+                        <img src="{{SelectedArticle.SourceDBId.ImageUrl}}"> <strong>{{SelectedArticle.SourceDBId.SourceName}}</strong>
+                        |{{SelectedArticle.Title}}
+                    </div>
+                    <div class="timeline-body">
+                        <img src="{{SelectedArticle.ImageUrl}}" class="img-text" width="150" align="left">
+                        <p>{{SelectedArticle.Body}}</p>
+                        <ul class="list-tags">
+                            <li ng-repeat="item in SelectedArticle.Tags"><a href="#"><span class="fa fa-tag"></span>
+                                {{item.TagId.TagName}}</a></li>
+
+                        </ul>
+                    </div>
+
+                    <div class="timeline-footer">
+                        <a href="{{SelectedArticle.ArticleUrl}}" target="_blank">Kaynağında Görüntüle</a>
+                        <div class="pull-right">
+                              <a href="#"><span class="fa fa-bell"></span> Kayıt Tarihi: {{SelectedArticle.CreatedAt}}</a>
+                              <a href="#"><span class="fa fa-bell"></span>Haber Tarihi: {{SelectedArticle.PubDate}}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END TIMELINE ITEM -->
+
+
+        </div>
+    </div>
+
+
+    <div class="col-md-3">
+        <div class="panel panel-default">
+            <div class="panel-heading ui-draggable-handle">
+                <h3 class="panel-title">Güncel Tagler</h3>
+            </div>
+            <div class="panel-body">
+                <ul class="list-tags">
+                    <li ng-repeat="item in GuncelTagler"><a href="javascript:void(0);" ng-click="AddTagToArticle(item)"><span class="fa fa-tag"></span>
+                        {{item.TagName}}</a></li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="panel panel-default">
+            <div class="panel-heading ui-draggable-handle">
+                <h3 class="panel-title">Haberin Tagleri</h3>
+            </div>
+            <div class="panel-body">
+
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="yeni tag ekle" ng-model="tagName" >
+                    <span class="input-group-btn">
+                                                    <button ng-click="AddNewTag(tagName)" class="btn btn-default" type="button">Tag'i Ekle</button>
+                                                </span>
+                </div>
+                 <hr>
+                <ul class="list-tags">
+                    <li ng-repeat="item in SelectedArticle.Tags"><a href="javascript:void(0);" ng-click="DeleteTagFromArticle(item)"><span class="fa fa-tag"></span>
+                        {{item.TagId.TagName}}</a></li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<style>
+    tbody tr:hover {
+        cursor: pointer
+    }
+
+    #grid {
+        border-width: 0;
+        height: 100%; /* DO NOT USE !important for setting the Grid height! */
+    }
+</style>
+
