@@ -33,7 +33,7 @@ toastr.options = {
 
 app.config(function ($routeProvider, $locationProvider) {
     $routeProvider
-        .when("/", {})
+        .when("/articles", {})
         .when("/articles", {
             templateUrl: "pages/articles.html",
             controller: "articlesController"
@@ -50,7 +50,7 @@ app.config(function ($routeProvider, $locationProvider) {
             templateUrl: "pages/sources.html",
             controller: "sourcesController"
         })
-        .otherwise({redirectTo: "/sources"});
+        .otherwise({redirectTo: "/articles"});
     $locationProvider.html5Mode(false);
 });
 
