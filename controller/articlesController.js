@@ -93,7 +93,12 @@
                 template: "<img src='#= SourceImageUrl #' alt='#= ImageUrl #' width='48px' height='48px'></img>"
             },
             {field: "SourceName", title: "Kaynak", width: "120px"},
-            {field: "PubDate", title: "Haber Tarihi", format: "{0:dd.MM.yyyy HH:mm}", width: "180px"},
+            {field: "PubDate", title: "Haber Tarihi", format: "{0:dd.MM.yyyy HH:mm}", width: "180px",
+
+             template: "#=kendo.toString(kendo.parseDate(moment(" + 'PubDate' + ").toDate(), 'yyyy-MM-dd'), '" + 'dd.MM.yyyy HH:mm' + "' )# "
+
+
+            },
             {
                 filterable: true,
                 field: "Title",
