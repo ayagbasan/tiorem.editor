@@ -50,6 +50,10 @@ app.config(function ($routeProvider, $locationProvider) {
             templateUrl: "pages/sources.html",
             controller: "sourcesController"
         })
+        .when("/googleNews", {
+            templateUrl: "pages/googleNews.html",
+            controller: "googleNewsController"
+        })
         .otherwise({redirectTo: "/articles"});
     $locationProvider.html5Mode(false);
 });
@@ -154,5 +158,5 @@ app.ServerErrorParser = (e) => {
     } catch (e) {
         errorDetail += " Status Code:" + e.status + " Detail:" + e.errorThrown
     }
-    kendo.alert(errorDetail);
+    alert(errorDetail);
 };

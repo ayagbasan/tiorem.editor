@@ -3,22 +3,78 @@
     <div class="col-md-12">
         <div class="panel panel-default">
 
+
+            <div class="panel-body">
+                <form class="form-horizontal" role="form">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">İçerik</label>
+                                <div class="col-md-9">
+                                    <input id="haberIcerigi" name="haberIcerigi" type="text" class="form-control" value="Haber içeriğinde ara">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Kaynak</label>
+                                <div class="col-md-9">
+                                        <select id="kaynak" kendo-multi-select k-options="kaynakOptions" k-ng-model="kaynakIds"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Başlangıç</label>
+                                <div class="col-md-9">
+                                        <input id="baslangicTarihi" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Bitiş</label>
+                                <div class="col-md-9">
+                                    <input id="bitisTarihi" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Onay Durumu</label>
+                                <div class="col-md-9">
+                                    <select id="onayDurumu" name="onayDurumu" kendo-multi-select style="width: 100%">
+                                        <option value="Waiting Approve">Onay Bekleyenler</option>
+                                        <option value="Approved">Onaylanan</option>
+                                        <option value="Not Approved">Red</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+
+
             <div class="panel-heading ui-draggable-handle">
                 <h3 class="panel-title">HABERLER</h3>
             </div>
-            <div class="panel-body panel-body-search">
-                <div class="input-group">
-                    <span class="input-group-addon"><span class="fa fa-search"></span></span>
-                    <input id="filterArticle" type="text" class="form-control" placeholder="Haber ara...">
-                </div>
-            </div>
             <div class="panel-body panel-body-table">
-
-
-                <!--<div id="grid"></div>-->
                 <div id="grid"
                      kendo-grid [filterable]="true"
-                     k-options="gridOptions"
+                     k-options="gridOptions"></div>
             </div>
 
 
@@ -49,14 +105,11 @@
         </div>
 
 
-
         <div class="timeline" style="width: 100%" ng-show="SelectedArticle!=null">
 
 
-
-
             <!-- START TIMELINE ITEM -->
-            <div class="timeline-item" style="width: 100%" >
+            <div class="timeline-item" style="width: 100%">
                 <div class="timeline-item-content">
                     <div class="timeline-heading">
                         <img src="{{SelectedArticle.SourceDBId.ImageUrl}}"> <strong>{{SelectedArticle.SourceDBId.SourceName}}</strong>
@@ -75,8 +128,8 @@
                     <div class="timeline-footer">
                         <a href="{{SelectedArticle.ArticleUrl}}" target="_blank">Kaynağında Görüntüle</a>
                         <div class="pull-right">
-                              <a href="#"><span class="fa fa-bell"></span> Kayıt Tarihi: {{SelectedArticle.CreatedAt}}</a>
-                              <a href="#"><span class="fa fa-bell"></span>Haber Tarihi: {{SelectedArticle.PubDate}}</a>
+                            <a href="#"><span class="fa fa-bell"></span> Kayıt Tarihi: {{SelectedArticle.CreatedAt}}</a>
+                            <a href="#"><span class="fa fa-bell"></span>Haber Tarihi: {{SelectedArticle.PubDate}}</a>
                         </div>
                     </div>
                 </div>
@@ -95,7 +148,8 @@
             </div>
             <div class="panel-body">
                 <ul class="list-tags">
-                    <li ng-repeat="item in GuncelTagler"><a href="javascript:void(0);" ng-click="AddTagToArticle(item)"><span class="fa fa-tag"></span>
+                    <li ng-repeat="item in GuncelTagler"><a href="javascript:void(0);" ng-click="AddTagToArticle(item)"><span
+                            class="fa fa-tag"></span>
                         {{item.TagName}}</a></li>
 
                 </ul>
@@ -110,14 +164,17 @@
             <div class="panel-body">
 
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="yeni tag ekle" ng-model="tagName" >
+                    <input type="text" class="form-control" placeholder="yeni tag ekle" ng-model="tagName">
                     <span class="input-group-btn">
-                                                    <button ng-click="AddNewTag(tagName)" class="btn btn-default" type="button">Tag'i Ekle</button>
+                                                    <button ng-click="AddNewTag(tagName)" class="btn btn-default"
+                                                            type="button">Tag'i Ekle</button>
                                                 </span>
                 </div>
-                 <hr>
+                <hr>
                 <ul class="list-tags">
-                    <li ng-repeat="item in SelectedArticle.Tags"><a href="javascript:void(0);" ng-click="DeleteTagFromArticle(item)"><span class="fa fa-tag"></span>
+                    <li ng-repeat="item in SelectedArticle.Tags"><a href="javascript:void(0);"
+                                                                    ng-click="DeleteTagFromArticle(item)"><span
+                            class="fa fa-tag"></span>
                         {{item.TagId.TagName}}</a></li>
 
                 </ul>

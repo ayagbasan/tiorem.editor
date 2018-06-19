@@ -5,7 +5,7 @@
     log("articlesController loaded.", $rootScope.ENVIRONMENT.WebServiceURL);
 
 
-    let crudServiceBaseUrl = $rootScope.ENVIRONMENT.WebServiceURL + "article/";
+    let crudServiceBaseUrl = $rootScope.ENVIRONMENT.WebServiceURL + "article?SourceId=776";
 
     $scope.dataSource = new kendo.data.DataSource({
         transport: {
@@ -93,9 +93,10 @@
                 template: "<img src='#= SourceImageUrl #' alt='#= ImageUrl #' width='48px' height='48px'></img>"
             },
             {field: "SourceName", title: "Kaynak", width: "120px"},
-            {field: "PubDate", title: "Haber Tarihi", format: "{0:dd.MM.yyyy HH:mm}", width: "180px",
+            {
+                field: "PubDate", title: "Haber Tarihi", format: "{0:dd.MM.yyyy HH:mm}", width: "180px",
 
-             template: "#=kendo.toString(kendo.parseDate(moment(" + 'PubDate' + ").toDate(), 'yyyy-MM-dd'), '" + 'dd.MM.yyyy HH:mm' + "' )# "
+                template: "#=kendo.toString(kendo.parseDate(moment(" + 'PubDate' + ").toDate(), 'yyyy-MM-dd'), '" + 'dd.MM.yyyy HH:mm' + "' )# "
 
 
             },
@@ -103,7 +104,7 @@
                 filterable: true,
                 field: "Title",
                 title: "Haber Başlığı",
-                template: "<a href=\"javascript:void(0);\" ng-click=\"clickMe('#=_id #')\" >#=Title#</a> ",
+                template: "<a href=\"javascript:void(0);\" ng-click=\"articleDetails('#=_id #')\" >#=Title#</a> ",
                 /*
                                 template: "<a href='javascript:void(0);' class='link' ng-click='showWindow(dataItem)'>#=Title#</a>"
                 */
@@ -126,10 +127,12 @@
 
         grid.element.on('dblclick', 'tbody tr[data-uid]', function (e) {
             $scope.selectedItem = grid.dataItem(grid.select());
-        })
+        });
+
     };
 
-    $scope.clickMe = function (id) {
+
+    $scope.articleDetails = function (id) {
         /* let data = $("#grid").data("kendoGrid").dataSource.data();
          for (let i = 0; i < data.length; i++) {
              if (data[i]._id === id) {
@@ -159,23 +162,6 @@
         });
 
     };
-
-
-    $("#filterArticle").keyup(function () {
-        let selecteditem = $('#filterArticle').val();
-        let kgrid = $("#grid").data("kendoGrid");
-        let orfilter = {logic: "and", filters: []};
-        orfilter.filters.push({field: "Title", operator: "contains", value: selecteditem});
-        kgrid.dataSource.filter(orfilter);
-    });
-
-    let url = $rootScope.ENVIRONMENT.WebServiceURL + "tag/";
-    CallServiceFactory.get(url).then(function (data) {
-        if (data.Data) {
-            $scope.GuncelTagler = data.Data;
-            //console.log(data.Data);
-        }
-    });
 
     $scope.AddTagToArticle = (tag) => {
 
@@ -242,7 +228,6 @@
         log(tag);
     };
 
-
     $scope.AddNewTag = (tagName) => {
 
 
@@ -260,7 +245,7 @@
             if ($scope.SelectedArticle)
                 $scope.AddTagToArticle(data.Data);
 
-            $scope.tagName="";
+            $scope.tagName = "";
 
         }).catch((err) => {
             app.ToatsErrorResponse(err);
@@ -284,5 +269,118 @@
         window.center().open();
     };*/
 
+
+    $scope.initialize = () => {
+        //kaynaklar
+        $scope.kaynakOptions = {
+            placeholder: "Kaynak seçiniz...",
+            dataTextField: "SourceName",
+            dataValueField: "SourceName",
+            valuePrimitive: true,
+            autoBind: false,
+            autoClose: true,
+            tagMode: "single",
+            dataSource: {
+                type: "json",
+                transport: {
+                    read: {
+                        url: $rootScope.ENVIRONMENT.WebServiceURL + "source?Active=true"
+                    }
+                },
+                schema: {
+                    data: "Data",
+                    total: "TotalCount",
+                    model: {
+                        id: "_id",
+                        fields: {
+
+                            SourceName: {type: "string"}
+                        }
+                    }
+                }
+            },
+
+        };
+
+
+        // timepickers
+
+
+
+        //guncel tag ler
+        let url = $rootScope.ENVIRONMENT.WebServiceURL + "tag/";
+        CallServiceFactory.get(url).then(function (data) {
+            if (data.Data) {
+                $scope.GuncelTagler = data.Data;
+                //console.log(data.Data);
+            }
+        });
+
+        $("#filterArticle").keyup(function () {
+            let selecteditem = $('#filterArticle').val();
+            let kgrid = $("#grid").data("kendoGrid");
+            let orfilter = {logic: "and", filters: []};
+            orfilter.filters.push({field: "Title", operator: "contains", value: selecteditem});
+            kgrid.dataSource.filter(orfilter);
+        });
+    };
+
+
+    $scope.initialize();
+
+    function startChange() {
+        var startDate = start.value(),
+            endDate = end.value();
+
+        if (startDate) {
+            startDate = new Date(startDate);
+            startDate.setDate(startDate.getDate());
+            end.min(startDate);
+        } else if (endDate) {
+            start.max(new Date(endDate));
+        } else {
+            endDate = new Date();
+            start.max(endDate);
+            end.min(endDate);
+        }
+    }
+
+    function endChange() {
+        var endDate = end.value(),
+            startDate = start.value();
+
+        if (endDate) {
+            endDate = new Date(endDate);
+            endDate.setDate(endDate.getDate());
+            start.max(endDate);
+        } else if (startDate) {
+            end.min(new Date(startDate));
+        } else {
+            endDate = new Date();
+            start.max(endDate);
+            end.min(endDate);
+        }
+    }
+
+    let today = kendo.date.today();
+
+    let start = $("#baslangicTarihi").kendoDateTimePicker({
+        value: today,
+        change: startChange,
+        timeFormat: "HH:mm",
+        format :"dd.MM.yyyy hh:mm",
+        dateInput: false
+    }).data("kendoDateTimePicker");
+
+    let end = $("#bitisTarihi").kendoDateTimePicker({
+        value: today,
+        change: endChange,
+        timeFormat: "HH:mm",
+        format :"dd.MM.yyyy hh:mm",
+        dateInput: false
+    }).data("kendoDateTimePicker");
+
+    start.max(end.value());
+    end.min(start.value());
 
 }]);
