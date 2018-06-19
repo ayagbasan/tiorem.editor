@@ -39,7 +39,10 @@
                     link: {editable: false},
                     guid: {editable: false},
                     createdAt: {editable: false, type: "date"},
-                    pubDate: {editable: false}
+                    pubDate: {editable: false},
+                    isoDate: {editable: false, type: "date"},
+                    content: {editable: false},
+                    contentSnippet: {editable: false},
                 }
             }
         }
@@ -48,7 +51,7 @@
 
     $scope.gridOptions = {
         dataSource: $scope.dataSource,
-        autoBind: true,
+
         pageable: {
             refresh: true,
             pageSizes: true,
@@ -59,7 +62,7 @@
         },
         height: 755,
         filterable: {
-            mode: "row"
+            mode: "menu, row"
         },
         sortable: true,
         scrollable: true,
@@ -68,12 +71,19 @@
 
             {field: "clusterId", title: "clusterId", width: "280px"},
             {
-                field: "pubDate", title: "pubDate", format: "{0:dd.MM.yyyy HH:mm}", width: "180px",
-                template: "#=kendo.toString(kendo.parseDate(moment(" + 'pubDate' + ").toDate(), 'yyyy-MM-dd'), '" + 'dd.MM.yyyy HH:mm' + "' )# "
+
+                field: "isoDate", title: "isoDate", format: "{0:dd.MM.yyyy HH:mm}", width: "180px",
+                template: "#=kendo.toString(kendo.parseDate(moment(" + 'isoDate' + ").toDate(), 'yyyy-MM-dd'), '" + 'dd.MM.yyyy HH:mm' + "' )# "
 
 
             },
             {field: "title", title: "title", filterable: true},
+            {
+                field: "content",
+                title: "content",
+                filterable: true,
+                template: "#=content#"
+            },
             {
                 width: "120px",
                 filterable: true,
@@ -83,13 +93,8 @@
 
             },
             {field: "guid", title: "Onay Tarihi", width: "300px"},
-        ],
-        editable: {
-            mode: "popup",
-        },
-        change: (arg) => {
+        ]
 
-        }
     };
 
 
