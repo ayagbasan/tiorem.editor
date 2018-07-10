@@ -1,16 +1,6 @@
-﻿const app = angular.module("app", ["kendo.directives","ngRoute"]);
+﻿const app = angular.module("app", ["kendo.directives", "ngRoute"]);
 const log = console.log.bind(console);
-const ENV =
-    {
-        DEV:
-            {
-                WebServiceURL: "http://localhost:3000/api/"
-            },
-        PROD:
-            {
-                WebServiceURL: "https://tioremapi.herokuapp.com/api/"
-            }
-    };
+
 
 toastr.options = {
     "closeButton": true,
@@ -33,68 +23,229 @@ toastr.options = {
 
 app.config(function ($routeProvider, $locationProvider) {
     $routeProvider
-        .when("/articles", {})
-        .when("/articles", {
-            templateUrl: "pages/articles.html",
-            controller: "articlesController"
+
+        .when("/webhose", {
+            templateUrl: "pages/webhose.html",
+            controller: "webhoseController",
+            requireLogin: true
+
         })
-        .when("/tags", {
-            templateUrl: "pages/tags.html",
-            controller: "tagsController"
+        .when("/googleRSS", {
+            templateUrl: "pages/googleRSS.html",
+            controller: "googleRSSController",
+            requireLogin: false
+
         })
-        .when("/categories", {
-            templateUrl: "pages/categories.html",
-            controller: "categoriesController"
+        .when("/login", {
+
+            controller: "loginController",
+            requireLogin: false,
+            redirectTo: function (routeParams) {
+                window.location = '/login.html';
+            }
+
         })
-        .when("/sources", {
-            templateUrl: "pages/sources.html",
-            controller: "sourcesController"
-        })
-        .when("/googleNews", {
-            templateUrl: "pages/googleNews.html",
-            controller: "googleNewsController"
-        })
-        .otherwise({redirectTo: "/articles"});
+        .otherwise({
+            redirectTo: function (routeParams) {
+                window.location = '/login.html';
+            }
+        });
+
     $locationProvider.html5Mode(false);
 });
 
 
-app.controller("appController", ["$scope", "$rootScope", "CallServiceFactory", function ($scope, $rootScope, CallServiceFactory) {
-
-    console.log("appController loaded");
-
-    $rootScope.ENVIRONMENT = ENV.PROD;
 
 
-}]);
+app.controller("appController", ["$location", "$scope", "$rootScope", "CallServiceFactory", "$window",
+    function ($location, $scope, $rootScope, CallServiceFactory, $window) {
+
+        console.log("appController loaded");
+
+        $rootScope.ENVIRONMENT = CurrentENV;
+        $rootScope.USER = JSON.parse(localStorage.getItem("Account"));
+
+        if (!$rootScope.USER)
+            $window.location.href = '/login.html';
+        else {
+
+            CallServiceFactory.post("global/tokenCheck", { token: $rootScope.USER.password })
+                .then(function (data) {
+
+                    if (!data.IsSuccess) {
+                        app.ToatsErrorResponse(data);
+                        $window.location.href = '/login.html';
+                    }
+                    else {
+                        $rootScope.USER.Logged = true;
+                        localStorage.setItem("Account", JSON.stringify($rootScope.USER));
+                        $scope.UserExist();
+                    }
+
+                }).catch(function (err) {
+                    app.ToatsError("Token not valid. " + err, );
+                });
+        }
 
 
-app.factory('CallServiceFactory', function ($http, $q) {
+
+        $scope.UserExist = () => {
+
+            log("Current user", $rootScope.USER);
+        }
+
+        $scope.signOut = () => {
+            $rootScope.USER.Logged = false;
+            $rootScope.USER.password = "";
+            localStorage.setItem("Account", JSON.stringify($rootScope.USER));
+        }
+
+
+
+    }]);
+
+app.controller("loginController", ["$location", "$scope", "$rootScope", "$window", "CallServiceFactory",
+    function ($location, $scope, $rootScope, $window, CallServiceFactory) {
+
+        log("loginController loaded.");
+        $rootScope.ENVIRONMENT = CurrentENV;
+
+        $scope.email = "ahmetyagibasan@gmail.com";
+        $scope.password = "123456";
+        $scope.Logged = false;
+        $scope.ShowSignUpPanel = false;
+        $rootScope.USER = JSON.parse(localStorage.getItem("Account"));
+        if ($rootScope.USER) {
+            CallServiceFactory.post("global/tokenCheck", { token: $rootScope.USER.password })
+                .then(function (data) {
+
+                    if (data.IsSuccess) {
+                        $scope.Logged = true;
+                    }
+                }).catch(function (err) {
+                    app.ToatsError("Token not valid. " + err, );
+                });
+        }
+
+        $scope.signUp = () => {
+
+            let parameters =
+                {
+                    uuid: $scope.email,
+                    username: $scope.email,
+                    password: $scope.password,
+                    email: $scope.email,
+
+                }
+
+            CallServiceFactory.post("global/register", parameters)
+                .then(function (data) {
+
+                    if (!data.IsSuccess)
+                        app.ToatsErrorResponse(data);
+                    else {
+                        localStorage.setItem("Account", JSON.stringify(data.Data));
+                        app.ToatsSuccess("Account registered");
+                        $scope.signIn();
+                    }
+
+                }).catch(function (err) {
+                    app.ToatsError("Account not register. " + err, );
+                });
+        }
+
+        $scope.signIn = () => {
+
+
+            let parameters =
+                {
+                    username: $scope.email,
+                    password: $scope.password
+                }
+
+            CallServiceFactory.post("global/authenticate", parameters)
+                .then(function (data) {
+
+                    if (!data.IsSuccess)
+                        app.ToatsErrorResponse(data);
+                    else {
+                        data.Data.Logged = true;
+                        localStorage.setItem("Account", JSON.stringify(data.Data));
+                        app.ToatsSuccess("Login succesfuly");
+                        $scope.mainPage();
+                    }
+
+                }).catch(function (err) {
+                    app.ToatsError("Login error. " + err, );
+                });
+        }
+
+        $scope.signOut = () => {
+            $rootScope.USER.password = "";
+            $rootScope.USER.Logged = false;
+            localStorage.setItem("Account", JSON.stringify($rootScope.USER));
+            $scope.Logged = false;
+            $scope.ShowSignUpPanel = false;
+        }
+
+        $scope.mainPage = () => {
+            $window.location.href = '/index.html#webhose';
+        }
+
+    }]);
+
+app.factory('CallServiceFactory', function ($http, $q, $rootScope) {
 
     //GET all blogs
-    var get = function (url) {
+    var get = function (serviceName) {
+
+        let url = $rootScope.ENVIRONMENT.WebServiceURL + serviceName;
         return $http.get(url).then(function (response) {
-                return response.data;
-            }
+            return response.data;
+        }
         ).catch(function (response) {
             return $q.reject(response.data);
         });
     };
 
-    var put = function (url, parameters) {
+    var getExternal = function (url) {
+
+        return $http.get(url).then(function (response) {
+            return response.data;
+        }
+        ).catch(function (response) {
+            return $q.reject(response.data);
+        });
+    };
+
+    var put = function (serviceName, parameters) {
+        let url = $rootScope.ENVIRONMENT.WebServiceURL + serviceName;
         return $http.put(url, JSON.stringify(parameters)).then(function (response) {
-                return response.data;
-            }
+            return response.data;
+        }
         ).catch(function (response) {
             return $q.reject(response.data);
         });
     };
 
-    var post = function (url, parameters) {
-        return $http.post(url, JSON.stringify(parameters)).then(function (response) {
-                return response.data;
-            }
+    var del = function (serviceName, parameters) {
+        let url = $rootScope.ENVIRONMENT.WebServiceURL + serviceName;
+        return $http.delete(url).then(function (response) {
+            return response.data;
+        }
         ).catch(function (response) {
+            return $q.reject(response.data);
+        });
+    };
+
+    var post = function (serviceName, parameters) {
+        let url = $rootScope.ENVIRONMENT.WebServiceURL + serviceName;
+        return $http.post(url, JSON.stringify(parameters)).then(function (response) {
+            response.data.Tag = serviceName;
+            return response.data;
+        }
+        ).catch(function (response) {
+            response.data.Tag = serviceName;
             return $q.reject(response.data);
         });
     };
@@ -102,19 +253,45 @@ app.factory('CallServiceFactory', function ($http, $q) {
 
     return {
         get: get,
+        getExternal: getExternal,
         put: put,
-        post: post
+        post: post,
+        del: del
     };
 });
 
-app.ShowLoading = (title) => {
-    /* $("#jqxLoader").jqxLoader({ text: title, isModal: true, width: 100, height: 60, imagePosition: 'top' });
-     $('#jqxLoader').jqxLoader('open');*/
-};
+app.run(function ($rootScope, $window, CallServiceFactory) {
+    $rootScope.$on('$routeChangeSuccess', function (event, next, current) {
+        log("sayfa değişiyor");
 
-app.CloseLoading = () => {
-    // $('#jqxLoader').jqxLoader('close');
-};
+        if (next && next.$$route && next.$$route.requireLogin) {
+
+            log("Kimlik Doğrulama yapılıyor");
+            CallServiceFactory.post("global/tokenCheck", { token: $rootScope.USER.password })
+                .then(function (data) {
+                    if (!data.IsSuccess) {
+                        log("kullanıcı yok");
+                        $window.location.href = '/login.html';
+                    }
+                    else {
+                        log("Kimlik doğrulama Başarılı");
+                    }
+
+                }).catch(function (err) {
+                    app.ToatsError("Token error. " + err, );
+                });
+
+
+        }
+        else {
+            log("Kimlik doğrulamaya gerek yok");
+        }
+    });
+});
+
+
+
+
 
 app.ToatsSuccess = (title) => {
     toastr["success"](title);
@@ -160,3 +337,4 @@ app.ServerErrorParser = (e) => {
     }
     alert(errorDetail);
 };
+

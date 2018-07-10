@@ -1,0 +1,13 @@
+<h3>All terminators</h3>
+<ul>
+  <li ng-repeat='(terminatorId, terminator) in terminators'>
+    {{ terminator.name }} 
+    <div class='btn btn-default' ng-click='deleteTerminator(terminatorId)'>Delete</div>
+  </li>
+</ul>
+
+<input type='text' ng-model='terminator.name'>
+<div class='btn btn-danger' ng-click='createTerminator()'>Create Terminator</div>
+
+
+<pre>{{ auth | json }}</pre>
