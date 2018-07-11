@@ -6,7 +6,7 @@
             },
         PROD:
             {
-                WebServiceURL: "https://tioremapi.herokuapp.com/api/"
+                WebServiceURL: "https://tiorem-webhose-api.herokuapp.com/api/"
             }
     };
 
