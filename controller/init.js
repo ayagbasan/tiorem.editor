@@ -59,6 +59,12 @@ app.config(function ($routeProvider, $locationProvider) {
             requireLogin: false
 
         })
+        .when("/rss", {
+            templateUrl: "pages/rss.html",
+            controller: "rssController",
+            requireLogin: false
+
+        })
         .when("/login", {
 
             controller: "loginController",
