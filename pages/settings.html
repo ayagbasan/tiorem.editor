@@ -1,5 +1,6 @@
 ﻿
 <div class="row">
+     
     <div class="col-md-6">
         <form class="form-horizontal">
             <div class="panel panel-default">
@@ -7,19 +8,10 @@
                     <h3 class="panel-title">
                         <strong>GoogleRSS Config</strong>
                     </h3>
-                    <!--<ul class="panel-controls">
-                        <li>
-                            <label class="switch">
-                                <input type="checkbox"   value="1" ng-model="settings.GoogleRSS.status" >
-                                <span></span>
-                            </label>
-                        </li>
-                        <li>
-                            <h3 class="panel-title">
-                                <strong ng-bind="settings.GoogleRSS.status===1?'Running':'Stopped'"></strong>
-                            </h3>
-                        </li>
-                    </ul>-->
+
+                    <button class="btn btn-success pull-right" ng-click="serviceStatus('GoogleRSS','Stop')">Stop</button>
+                    <button class="btn btn-danger pull-right" ng-click="serviceStatus('GoogleRSS','Start')">Start</button>
+
                 </div>
 
                 <div class="panel-body">
@@ -115,19 +107,9 @@
                     <h3 class="panel-title">
                         <strong>WebHose Config</strong>
                     </h3>
-                    <!--<ul class="panel-controls">
-                        <li>
-                            <label class="switch">
-                                <input type="checkbox"   value="1" ng-model="settings.WebHose.status" >
-                                <span></span>
-                            </label>
-                        </li>
-                        <li>
-                            <h3 class="panel-title">
-                                <strong ng-bind="settings.WebHose.status===1?'Running':'Stopped'"></strong>
-                            </h3>
-                        </li>
-                    </ul>-->
+                    <button class="btn btn-success pull-right" ng-click="serviceStatus('WebHose','Stop')">Stop</button>
+                    <button class="btn btn-danger pull-right" ng-click="serviceStatus('WebHose','Start')">Start</button>
+
                 </div>
 
                 <div class="panel-body">

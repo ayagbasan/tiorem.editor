@@ -44,6 +44,24 @@
             });
     }
 
+
+    $scope.serviceStatus = function (serviceName, term) {
+        CallServiceFactory.post("config/webHose", { token: $rootScope.USER.password, ServiceName: serviceName, Term: term })
+            .then(function (data) {
+
+                if (!data.IsSuccess) {
+                    app.ToatsErrorResponse(data)
+                }
+                else {
+                    
+                    app.ToatsSuccess("Update completed")
+                }
+
+            }).catch(function (err) {
+                app.ToatsError("Token not valid. " + err, );
+            });
+    }
+
    
 
 
