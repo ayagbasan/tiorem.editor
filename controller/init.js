@@ -24,6 +24,12 @@ toastr.options = {
 app.config(function ($routeProvider, $locationProvider) {
     $routeProvider
 
+        .when("/", {
+            templateUrl: "pages/settings.html",
+            controller: "settingsController",
+            requireLogin: true
+
+        })
         .when("/webhose", {
             templateUrl: "pages/webhose.html",
             controller: "webhoseController",
@@ -33,6 +39,11 @@ app.config(function ($routeProvider, $locationProvider) {
         .when("/googleRSS", {
             templateUrl: "pages/googleRSS.html",
             controller: "googleRSSController",
+            requireLogin: false
+        })
+        .when("/settings", {
+            templateUrl: "pages/settings.html",
+            controller: "settingsController",
             requireLogin: false
 
         })
@@ -49,7 +60,8 @@ app.config(function ($routeProvider, $locationProvider) {
             redirectTo: function (routeParams) {
                 window.location = '/login.html';
             }
-        });
+        })
+
 
     $locationProvider.html5Mode(false);
 });
@@ -65,27 +77,30 @@ app.controller("appController", ["$location", "$scope", "$rootScope", "CallServi
         $rootScope.ENVIRONMENT = CurrentENV;
         $rootScope.USER = JSON.parse(localStorage.getItem("Account"));
 
-        if (!$rootScope.USER)
-            $window.location.href = '/login.html';
-        else {
+        //if (!$rootScope.USER)
+        //{
+        //    //$window.location.href = '/login.html';
+        //}
+            
+        //else {
 
-            CallServiceFactory.post("global/tokenCheck", { token: $rootScope.USER.password })
-                .then(function (data) {
+        //    CallServiceFactory.post("global/tokenCheck", { token: $rootScope.USER.password })
+        //        .then(function (data) {
 
-                    if (!data.IsSuccess) {
-                        app.ToatsErrorResponse(data);
-                        $window.location.href = '/login.html';
-                    }
-                    else {
-                        $rootScope.USER.Logged = true;
-                        localStorage.setItem("Account", JSON.stringify($rootScope.USER));
-                        $scope.UserExist();
-                    }
+        //            if (!data.IsSuccess) {
+        //                app.ToatsErrorResponse(data);
+        //                $window.location.href = '/login.html';
+        //            }
+        //            else {
+        //                $rootScope.USER.Logged = true;
+        //                localStorage.setItem("Account", JSON.stringify($rootScope.USER));
+        //                $scope.UserExist();
+        //            }
 
-                }).catch(function (err) {
-                    app.ToatsError("Token not valid. " + err, );
-                });
-        }
+        //        }).catch(function (err) {
+        //            app.ToatsError("Token not valid. " + err, );
+        //        });
+        //}
 
 
 
@@ -264,28 +279,29 @@ app.run(function ($rootScope, $window, CallServiceFactory) {
     $rootScope.$on('$routeChangeSuccess', function (event, next, current) {
         log("sayfa değişiyor");
 
-        if (next && next.$$route && next.$$route.requireLogin) {
+        return;
+        //if (next && next.$$route && next.$$route.requireLogin) {
 
-            log("Kimlik Doğrulama yapılıyor");
-            CallServiceFactory.post("global/tokenCheck", { token: $rootScope.USER.password })
-                .then(function (data) {
-                    if (!data.IsSuccess) {
-                        log("kullanıcı yok");
-                        $window.location.href = '/login.html';
-                    }
-                    else {
-                        log("Kimlik doğrulama Başarılı");
-                    }
+        //    log("Kimlik Doğrulama yapılıyor");
+        //    CallServiceFactory.post("global/tokenCheck", { token: $rootScope.USER.password })
+        //        .then(function (data) {
+        //            if (!data.IsSuccess) {
+        //                log("kullanıcı yok");
+        //                $window.location.href = '/login.html';
+        //            }
+        //            else {
+        //                log("Kimlik doğrulama Başarılı");
+        //            }
 
-                }).catch(function (err) {
-                    app.ToatsError("Token error. " + err, );
-                });
+        //        }).catch(function (err) {
+        //            app.ToatsError("Token error. " + err, );
+        //        });
 
 
-        }
-        else {
-            log("Kimlik doğrulamaya gerek yok");
-        }
+        //}
+        //else {
+        //    log("Kimlik doğrulamaya gerek yok");
+        //}
     });
 });
 
@@ -310,7 +326,7 @@ app.ToatsErrorResponse = (response) => {
     let msg;
     try {
         if (response.ErrorMessage !== undefined) {
-            msg = response.ErrorCode + " - " + response.ErrorMessage
+            msg = response.ErrorMessage
             if (response.ErrorDetail !== null) {
                 msg += " Detail: " + response.ErrorDetail
             }

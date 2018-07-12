@@ -1,0 +1,226 @@
+﻿
+<div class="row">
+    <div class="col-md-6">
+        <form class="form-horizontal">
+            <div class="panel panel-default">
+                <div class="panel-heading ui-draggable-handle">
+                    <h3 class="panel-title">
+                        <strong>GoogleRSS Config</strong>
+                    </h3>
+                    <!--<ul class="panel-controls">
+                        <li>
+                            <label class="switch">
+                                <input type="checkbox"   value="1" ng-model="settings.GoogleRSS.status" >
+                                <span></span>
+                            </label>
+                        </li>
+                        <li>
+                            <h3 class="panel-title">
+                                <strong ng-bind="settings.GoogleRSS.status===1?'Running':'Stopped'"></strong>
+                            </h3>
+                        </li>
+                    </ul>-->
+                </div>
+
+                <div class="panel-body">
+
+                    <div class="row">
+
+                        <div class="col-md-12">
+
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Api Secret Key</label>
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" class="form-control" ng-model="settings.GoogleRSS.apiSecretKey">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Max Query Limit</label>
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" class="form-control" ng-model="settings.GoogleRSS.maxQueryLimit">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Status</label>
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" class="form-control" ng-model="settings.GoogleRSS.status">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Periode</label>
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" class="form-control" ng-model="settings.GoogleRSS.periode">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Last Timestamp</label>
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" class="form-control" ng-model="settings.GoogleRSS.lastTimestamp">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Last Run Time</label>
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" class="form-control" ng-model="settings.GoogleRSS.lastRunTime">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Next Run Time</label>
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
+                                        <input type="text" class="form-control" ng-model="settings.GoogleRSS.nextRunTime">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="panel-footer">
+                    <button class="btn btn-primary pull-right" ng-click="update();">Update</button>
+                </div>
+            </div>
+        </form>
+
+
+    </div>
+
+
+    <div class="col-md-6">
+        <form class="form-horizontal">
+            <div class="panel panel-default">
+                <div class="panel-heading ui-draggable-handle">
+                    <h3 class="panel-title">
+                        <strong>WebHose Config</strong>
+                    </h3>
+                    <!--<ul class="panel-controls">
+                        <li>
+                            <label class="switch">
+                                <input type="checkbox"   value="1" ng-model="settings.WebHose.status" >
+                                <span></span>
+                            </label>
+                        </li>
+                        <li>
+                            <h3 class="panel-title">
+                                <strong ng-bind="settings.WebHose.status===1?'Running':'Stopped'"></strong>
+                            </h3>
+                        </li>
+                    </ul>-->
+                </div>
+
+                <div class="panel-body">
+
+                    <div class="row">
+
+                        <div class="col-md-12">
+
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Search Filter</label>
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" class="form-control" ng-model="settings.WebHose.searchQuery">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Api Secret Key</label>
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" class="form-control" ng-model="settings.WebHose.apiSecretKey">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Max Query Limit</label>
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" class="form-control" ng-model="settings.WebHose.maxQueryLimit">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Status</label>
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" class="form-control" ng-model="settings.WebHose.status">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Periode</label>
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" class="form-control" ng-model="settings.WebHose.periode">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Last Timestamp</label>
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" class="form-control" ng-model="settings.WebHose.lastTimestamp">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Last Run Time</label>
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" class="form-control" ng-model="settings.WebHose.lastRunTime">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Next Run Time</label>
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
+                                        <input type="text" class="form-control" ng-model="settings.WebHose.nextRunTime">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="panel-footer">
+                    <button class="btn btn-primary pull-right" ng-click="update();">Update</button>
+                </div>
+            </div>
+        </form>
+
+
+    </div>
+</div>
