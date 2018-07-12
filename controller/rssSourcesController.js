@@ -1,12 +1,12 @@
-﻿app.controller("categoriesController", ["$scope", "$rootScope", "CallServiceFactory", function ($scope, $rootScope, CallServiceFactory) {
+﻿app.controller("rssSourcesController", ["$scope", "$rootScope", "CallServiceFactory", function ($scope, $rootScope, CallServiceFactory) {
 
 
-    log("categoriesController loaded");
+    log("rssSourcesController loaded");
 
 
     $scope.SelectedArticle = null;
 
-    let serviceURL = $rootScope.ENVIRONMENT.WebServiceURL + "category/";
+    let serviceURL = $rootScope.ENVIRONMENT.WebServiceURL + "rssSource/";
     let dataSource = new kendo.data.DataSource({
         transport: {
             read: {
@@ -68,35 +68,30 @@
         error: function (e) {
             app.ToatsErrorResponse(e);
         },
-        serverPaging: true,
-        serverFiltering: true,
-        pageSize: 10,
         requestEnd: function (e) {
 
-            if (e.type == "destroy") {
-                if (e.response.IsSuccess) {
-                    app.ToatsSuccess("Kayıt başarıyla silindi");
-                }
-                else {
-                    app.ToatsError("Kayıt silinemedi. " + e.response.ErrorDetail);
-
-                    $('#grid').data('kendoGrid').dataSource.read();
-                    $('#grid').data('kendoGrid').refresh();
-                }
-            } else if (e.type === "create") {
+            if (e.type === "create") {
                 $('#grid').data('kendoGrid').dataSource.read();
                 $('#grid').data('kendoGrid').refresh();
             }
 
 
         },
+        serverPaging: true,
+        serverFiltering: true,
+        pageSize: 10,
         schema: {
             data: "Data.docs",
             total: "Data.total",
             model: {
                 id: "_id",
                 fields: {
-                    categoryName: { editable: true, nullable: false, type: "string" },
+                    sourceName: { editable: false, type: "string" },
+
+                    //category: { defaultValue: { categoryName: "1234", categoryName: "1234" } },
+                    category: { editable: true, nullable: false },
+                    url: { editable: true, nullable: false, type: "string" },
+                    lastUpdated: { editable: false, type: "date" },
                     createdAt: { editable: false, type: "date" },
                     updatedAt: { editable: false, type: "date" },
                     active: { editable: true, type: "boolean", defaultValue: true },
@@ -124,13 +119,14 @@
         },
         toolbar: ["create"],
         columns: [
-            {
-                field: "categoryName", title: "Kategori Adı"
-            },
+            { field: "sourceName", title: "Kaynak", width: "180px" },
+            { field: "url", title: "URL" },
+            //{ field: "category", title: "Kategori", width: "180px", editor: categoryDropDownEditor, template: "#=category.categoryName#" },
+            { field: "category", title: "Category", width: "150px", editor: categoryDropDownEditor, template: "#=category#" },
 
-            { field: "createdAt", title: "Kayıt Tarihi", format: "{0:dd.MM.yyyy HH:mm}", width: "180px" },
-            { field: "updatedAt", title: "Güncelleme Tarihi", format: "{0:dd.MM.yyyy HH:mm}", width: "180px" },
-            { field: "active", title: "Aktif", width: "150px", template: ' #= active ? "Aktif" : "Pasif"  # ' },
+            { field: "lastUpdated", title: "RSS in Son Güncellenme Tarihi", format: "{0:dd.MM.yyyy HH:mm}", width: "150px" },
+            { field: "createdAt", title: "Kayıt Tarihi", format: "{0:dd.MM.yyyy HH:mm}", width: "150px" },
+            { field: "active", title: "Aktif", width: "100px", template: ' #= active ? "Aktif" : "Pasif"  # ' },
             {
                 command: [
                     {
@@ -144,12 +140,31 @@
                         click: (e) => {
                             e.preventDefault();
                         }
-                    }], title: "İşlemler", width: "200px"
+                    }], title: "İşlemler", width: "150px"
             }],
         editable: {
-            mode: "popup",
+            mode: "inline",
         },
     });
 
+    function categoryDropDownEditor(container, options) {
+        $('<input required name="' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                autoBind: false,
+                dataTextField: "categoryName",
+                dataValueField: "categoryName",
+                dataSource: {
+                    type: "jsonp",
+                    transport: {
+                        read: $rootScope.ENVIRONMENT.WebServiceURL + "category/?page=1&pageSize=1&skip=0&take=1000"
+                    },
+                    schema: {
+                        data: "Data.docs",
+                        total: "Data.total"
+                    }
+                }
+            });
+    }
 
 }]);

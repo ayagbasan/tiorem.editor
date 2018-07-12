@@ -47,6 +47,18 @@ app.config(function ($routeProvider, $locationProvider) {
             requireLogin: false
 
         })
+        .when("/categories", {
+            templateUrl: "pages/categories.html",
+            controller: "categoriesController",
+            requireLogin: false
+
+        })
+        .when("/rssSources", {
+            templateUrl: "pages/rssSources.html",
+            controller: "rssSourcesController",
+            requireLogin: false
+
+        })
         .when("/login", {
 
             controller: "loginController",
