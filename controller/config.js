@@ -10,4 +10,4 @@
             }
     };
 
-const CurrentENV = ENV.DEV;
+const CurrentENV = ENV.PROD;
