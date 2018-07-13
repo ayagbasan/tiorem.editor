@@ -152,4 +152,45 @@
     });
 
 
+    $scope.importData = () => {
+
+        var list = $scope.categories.split("\n");
+        let reqData = [];
+
+        for (const iterator of list) {
+
+            let item = {
+                active: true,
+                categoryName: iterator.toLocaleUpperCase("tr-TR").trim(),
+                updatedAt: null,
+                active: true
+            }
+
+            reqData.push(item);
+        };
+
+
+
+        CallServiceFactory.post("category/import", { token: $rootScope.USER.password, Data: reqData })
+            .then(function (data) {
+
+                if (data.IsSuccess) {
+                    app.ToatsInfo(data.Data);
+                    $scope.categories = "";
+                    $('#grid').data('kendoGrid').dataSource.read();
+                    $('#grid').data('kendoGrid').refresh();
+                    $("#modal_basic").modal('hide');
+                }
+                else {
+                    app.ToatsErrorResponse(data);
+                }
+
+            }).catch(function (err) {
+                app.ToatsError("Token not valid. " + err, );
+            });
+
+
+    }
+
+
 }]);
