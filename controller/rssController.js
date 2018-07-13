@@ -70,7 +70,7 @@
         },
         serverPaging: true,
         serverFiltering: true,
-        pageSize: 10,
+        pageSize: 100,
         requestEnd: function (e) {
 
             //if (e.type == "destroy") {
