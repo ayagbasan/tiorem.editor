@@ -97,7 +97,7 @@ app.controller("appController", ["$location", "$scope", "$rootScope", "CallServi
         $rootScope.USER = JSON.parse(localStorage.getItem("Account"));
 
         if (!$rootScope.USER) {
-            $window.location.href = '/login';
+            $window.location.href = '/login.html';
         }
 
         else {
