@@ -313,7 +313,7 @@
             let cols = iterator.split("$$");
             if (cols.length > 0) {
                 let defCategory = "####"
-                if (cols.length == 1)
+                if (cols.length == 2)
                     defCategory = cols[1].toLocaleUpperCase("tr-TR");
 
                 let item = {
