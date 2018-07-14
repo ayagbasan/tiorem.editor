@@ -82,7 +82,7 @@
             },
             serverPaging: true,
             serverFiltering: true,
-            pageSize: 10,
+            pageSize: 1000,
             schema: {
                 data: "Data.docs",
                 total: "Data.total",

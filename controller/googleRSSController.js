@@ -70,7 +70,7 @@
         },
         serverPaging: true,
         serverFiltering: true,
-        pageSize: 100,
+        pageSize: 1000,
         requestEnd: function (e) {
 
             //if (e.type == "destroy") {
@@ -97,6 +97,9 @@
                 id: "_id",
                 fields: {
                     source: { editable: true, nullable: false, type: "string" },
+                    clusterId: { editable: false, nullable: false, type: "string" },
+                    newsId: { editable: false, nullable: false, type: "string" },
+                    relatedId: { editable: false, nullable: false, type: "string" },
                     title: { editable: true, nullable: false, type: "string" },
                     link: { editable: true, nullable: false, type: "string" },
                     guid: { editable: true, nullable: false, type: "string" },
@@ -134,7 +137,9 @@
         //toolbar: ["create"],
         columns: [
             { field: "source", title: "Kaynak", width: "180px" },
-            { field: "category", title: "Kategori", width: "180px" },
+            { field: "clusterId", title: "Cluster Id", width: "300px" },
+            { field: "newsId", title: "News Id", width: "120px" },
+            { field: "relatedId", title: "Related Id", width: "120px" },
             { field: "title", title: "Başlık" },
             { field: "link", title: "Url", template: '<a href="#=link#" target="_blank">Haberi aç</a>' },
             { field: "pubDate", title: "Yayın Tarihi", template: "#= kendo.toString(new Date(pubDate), 'yyyy.MM.dd HH:mm') #" },
