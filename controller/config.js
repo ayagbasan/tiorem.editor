@@ -9,4 +9,4 @@
                 WebServiceURL: "https://tiorem-webhose-api.herokuapp.com/api/"
             }
     };
-const CurrentENV = ENV.DEV;
+const CurrentENV = ENV.PROD;
