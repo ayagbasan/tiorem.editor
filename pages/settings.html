@@ -1,16 +1,15 @@
 ﻿
-<div class="row">
-     
-    <div class="col-md-6">
+ <div>
+
+    <div class="col-md-6" ng-repeat="job in jobs">
         <form class="form-horizontal">
             <div class="panel panel-default">
                 <div class="panel-heading ui-draggable-handle">
                     <h3 class="panel-title">
-                        <strong>GoogleRSS Config</strong>
+                        <strong ng-bind="job.jobName"> </strong>
                     </h3>
-
-                    <button class="btn btn-success pull-right" ng-click="serviceStatus('GoogleRSS','Stop')">Stop</button>
-                    <button class="btn btn-danger pull-right" ng-click="serviceStatus('GoogleRSS','Start')">Start</button>
+                    <div ng-show="job.status==1" class="btn btn-success pull-right">RUNNING</div>
+                    <div ng-show="job.status==0" class="btn btn-danger pull-right">STOPPED</div>
 
                 </div>
 
@@ -19,111 +18,30 @@
                     <div class="row">
 
                         <div class="col-md-12">
-
                             <div class="form-group">
-                                <label class="col-md-3 control-label">Api Secret Key</label>
-                                <div class="col-md-9">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text" class="form-control" ng-model="settings.GoogleRSS.apiSecretKey">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">Max Query Limit</label>
-                                <div class="col-md-9">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text" class="form-control" ng-model="settings.GoogleRSS.maxQueryLimit">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">Status</label>
-                                <div class="col-md-9">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text" class="form-control" ng-model="settings.GoogleRSS.status">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">Periode</label>
-                                <div class="col-md-9">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text" class="form-control" ng-model="settings.GoogleRSS.periode">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">Last Timestamp</label>
-                                <div class="col-md-9">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text" class="form-control" ng-model="settings.GoogleRSS.lastTimestamp">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">Last Run Time</label>
-                                <div class="col-md-9">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text" class="form-control" ng-model="settings.GoogleRSS.lastRunTime">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">Next Run Time</label>
+                                <label class="col-md-3 control-label">Auto Start</label>
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
-                                        <input type="text" class="form-control" ng-model="settings.GoogleRSS.nextRunTime">
+                                        <input type="text" class="form-control" ng-model="job.autoStart">
                                     </div>
                                 </div>
                             </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-                <div class="panel-footer">
-                    <button class="btn btn-primary pull-right" ng-click="update();">Update</button>
-                </div>
-            </div>
-        </form>
-
-
-    </div>
-
-
-    <div class="col-md-6">
-        <form class="form-horizontal">
-            <div class="panel panel-default">
-                <div class="panel-heading ui-draggable-handle">
-                    <h3 class="panel-title">
-                        <strong>WebHose Config</strong>
-                    </h3>
-                    <button class="btn btn-success pull-right" ng-click="serviceStatus('WebHose','Stop')">Stop</button>
-                    <button class="btn btn-danger pull-right" ng-click="serviceStatus('WebHose','Start')">Start</button>
-
-                </div>
-
-                <div class="panel-body">
-
-                    <div class="row">
-
-                        <div class="col-md-12">
-
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Run On Init</label>
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
+                                        <input type="text" class="form-control" ng-model="job.runOnInit">
+                                    </div>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Search Filter</label>
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text" class="form-control" ng-model="settings.WebHose.searchQuery">
+                                        <input type="text" class="form-control" ng-model="job.searchQuery">
                                     </div>
                                 </div>
                             </div>
@@ -132,7 +50,7 @@
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text" class="form-control" ng-model="settings.WebHose.apiSecretKey">
+                                        <input type="text" class="form-control" ng-model="job.apiSecretKey">
                                     </div>
                                 </div>
                             </div>
@@ -141,7 +59,7 @@
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text" class="form-control" ng-model="settings.WebHose.maxQueryLimit">
+                                        <input type="text" class="form-control" ng-model="job.maxQueryLimit">
                                     </div>
                                 </div>
                             </div>
@@ -151,7 +69,7 @@
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text" class="form-control" ng-model="settings.WebHose.status">
+                                        <input type="text" class="form-control" ng-model="job.status">
                                     </div>
                                 </div>
                             </div>
@@ -160,7 +78,7 @@
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text" class="form-control" ng-model="settings.WebHose.periode">
+                                        <input type="text" class="form-control" ng-model="job.periode">
                                     </div>
                                 </div>
                             </div>
@@ -169,7 +87,7 @@
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text" class="form-control" ng-model="settings.WebHose.lastTimestamp">
+                                        <input type="text" class="form-control" ng-model="job.lastTimestamp">
                                     </div>
                                 </div>
                             </div>
@@ -178,7 +96,7 @@
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text" class="form-control" ng-model="settings.WebHose.lastRunTime">
+                                        <input type="text" class="form-control" ng-model="job.lastRunTime">
                                     </div>
                                 </div>
                             </div>
@@ -187,10 +105,11 @@
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
-                                        <input type="text" class="form-control" ng-model="settings.WebHose.nextRunTime">
+                                        <input type="text" class="form-control" ng-model="job.nextRunTime">
                                     </div>
                                 </div>
                             </div>
+
 
                         </div>
 
@@ -198,7 +117,10 @@
 
                 </div>
                 <div class="panel-footer">
-                    <button class="btn btn-primary pull-right" ng-click="update();">Update</button>
+                    <button class="btn btn-primary pull-right" ng-click="update(job);">Update</button>
+
+                    <button ng-show="job.status==1" class="btn btn-danger pull-left" ng-click="serviceStatus(job,'stop')">Stop</button>
+                    <button ng-show="job.status==0" class="btn btn-success pull-left" ng-click="serviceStatus(job,'start')">Start</button>
                 </div>
             </div>
         </form>
